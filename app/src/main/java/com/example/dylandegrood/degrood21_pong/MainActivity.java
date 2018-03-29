@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
                 if(animator.isGameOver){
                     animator.pauseClick = false;
                     animator.isGameOver = false;
+                    animator.ballsInPlay++;
+                    animator.playerScore = 0;
                 }
                 else {
                     Ball newBall = new Ball(animator.randomX(), animator.randomY(), animator.randomVelocityX(), animator.randomVelocityY());

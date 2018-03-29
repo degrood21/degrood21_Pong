@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class PongAnimator implements Animator {
 
-    Random random = new Random(); // Random object created for randomizing numbers
+    private Random random = new Random(); // Random object created for randomizing numbers
 
     final int wallSize = 40; // size of the 3 walls
     final int paddleSize = 30; // the width size of the paddle
@@ -29,19 +29,17 @@ public class PongAnimator implements Animator {
     private int canvasHeight; // height of the animation surface
 
     private int currentLeftX = 774; // Left most edge of paddle is set to starting position
-
     private int currentRightX = 1274; // Right most edge of paddle is set to starting position
 
     private int fingerPos; //current finger position for paddle redrawing
 
-    ArrayList<Ball> balls = new ArrayList<Ball>(); // ArrayList of balls from ball class in order to create many
+    public int playerScore = 0; // playerScore stores current score
+    public int ballsInPlay; // ballsInPlay stores amount of balls in play
+
+    public ArrayList<Ball> balls = new ArrayList<Ball>(); // ArrayList of balls from ball class in order to create many
 
     public boolean pauseClick = false; // true if pause button was pressed, false otherwise
-    // needs to be public to be accessed from the MainActivity class
-    public boolean isGameOver = false;
-
-    private int playerScore = 0; // playerScore stores current score
-    public int ballsInPlay; // ballsInPlay stores amount of balls in play
+    public boolean isGameOver = false; // true if the last ball is lost
 
     private MainActivity activity; // Reference to the MainActivity to access the TextView;
     private TextView scoreTV; // TextView to be updated with current score
@@ -140,12 +138,12 @@ public class PongAnimator implements Animator {
         // if pauseClick is true stop balls at center of surface
         // if isGameOver will stop balls and display GameOver msg
         if (pauseClick || isGameOver) {
+            if (isGameOver) {
+                setGameOverMSG(canvas);
+            }
             for (int i = 0; i < balls.size(); i++) {
                 balls.get(i).Xposition = canvasWidth / 2;
                 balls.get(i).Yposition = canvasHeight / 2;
-            }
-            if(isGameOver){
-                setGameOverMSG(canvas);
             }
         }
 
@@ -203,7 +201,10 @@ public class PongAnimator implements Animator {
                     ballsInPlay--;
                     break;
                 } else { // If only one ball left, then prints Game Over
-
+                    balls.remove(i);
+                    Ball newBall = new Ball(randomX(), randomY(), randomVelocityX(), randomVelocityY());
+                    balls.add(newBall);
+                    ballsInPlay--;
                     isGameOver = !isGameOver;
 
                 }
@@ -349,7 +350,7 @@ public class PongAnimator implements Animator {
         Paint textPaint = new Paint();
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(75);
-        c.drawText("Game Over! Press Add Ball to Play Again", canvasWidth/5 - 75, canvasHeight / 3, textPaint);
+        c.drawText("Game Over! Press Add Ball to Play Again", canvasWidth / 5 - 75, canvasHeight / 3, textPaint);
 
     }
 
