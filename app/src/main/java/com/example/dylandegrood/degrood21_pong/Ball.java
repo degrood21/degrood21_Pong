@@ -8,7 +8,6 @@ package com.example.dylandegrood.degrood21_pong;
  * @author Dylan DeGrood
  * @version March 2018
  */
-
 public class Ball {
 
     float Xposition, Yposition, Xvelocity, Yvelocity;
